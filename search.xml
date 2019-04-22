@@ -54,9 +54,34 @@
     
     
     <entry>
+      <title>如何不翻墙访问谷歌</title>
+      <link href="/2019/04/20/%E5%A6%82%E4%BD%95%E4%B8%8D%E7%BF%BB%E5%A2%99%E8%AE%BF%E9%97%AE%E8%B0%B7%E6%AD%8C/"/>
+      <url>/2019/04/20/%E5%A6%82%E4%BD%95%E4%B8%8D%E7%BF%BB%E5%A2%99%E8%AE%BF%E9%97%AE%E8%B0%B7%E6%AD%8C/</url>
+      
+        <content type="html"><![CDATA[<p>&nbsp;&nbsp; 我们都知道谷歌浏览器被全球公认为全球最大的搜索引擎公司，而且不像百度，360等前几条全是广告。因此很方便我们进行资料查询。而现在是不允许访问谷歌的，进行翻墙的话，要么网速不稳定，要么得花钱。<strong>那如何访问呢？</strong></p><h3 id="步骤："><a href="#步骤：" class="headerlink" title="步骤："></a>步骤：</h3><ul><li>首先下载<strong>360极速浏览器</strong>，它基于<a href="https://baike.baidu.com/item/Chromium/529755" target="_blank" rel="noopener">Chromium</a>开源项目，具有闪电般的浏览速度、完备的安全特性及海量丰富的实用工具扩展。以前其自带谷歌访问助手，现在好像收不到了。</li><li>下载Google访问助手，<a href="https://pan.baidu.com/s/1xq4cVFcG0LDyPd6m10nDAg" target="_blank" rel="noopener">点这里</a>,提取码<strong>03ds </strong>；</li><li>再在360急速浏览器里打开扩展程序加载google访问助手中的第二个文件即可。（另外打开后会弹出广告页面，自己关掉即可）</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 其他 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> others </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>第一篇博客</title>
-      <link href="/2019/04/22/%E4%B8%8A%E4%BC%A0/"/>
-      <url>/2019/04/22/%E4%B8%8A%E4%BC%A0/</url>
+      <link href="/2019/04/19/%E4%B8%8A%E4%BC%A0/"/>
+      <url>/2019/04/19/%E4%B8%8A%E4%BC%A0/</url>
       
         <content type="html"><![CDATA[<h3 id="基于Hexo搭建个人博客"><a href="#基于Hexo搭建个人博客" class="headerlink" title="基于Hexo搭建个人博客"></a>基于Hexo搭建个人博客</h3><h4 id="创建原因："><a href="#创建原因：" class="headerlink" title="创建原因："></a>创建原因：</h4><p>&nbsp; &nbsp; 以前我写的博客都上传在<a href="https://github.com/beerNewbie" target="_blank" rel="noopener">github</a>上，但是每次想查询、复习的时候都不是十分方便。至于CSDN就是广告让人受不了。并且看见 别人那简洁清新的博客，心里很是痒痒。便自己动手搭建一个。</p><h4 id="历程"><a href="#历程" class="headerlink" title="历程"></a>历程</h4><p>&nbsp; &nbsp; 通过网上的一些视频资料，搭建起来不是很难。但要配置出自己喜欢的主题还是很费精力的，我前前后后下了几个主题，要么修改起来太过复杂，要么界面不好看。后来还是老老实实的选择很适合新手的<a href="https://http://theme-next.iissnan.com/" target="_blank" rel="noopener">hexo-theme-next</a>这款主题。很简洁清新。</p>]]></content>
       
