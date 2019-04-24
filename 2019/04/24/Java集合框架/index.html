@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="zA9J5F6LXs">
+
+
+
+  
+  
+  <link rel="stylesheet" href="/lib/fancybox/source/jquery.fancybox.css">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.0" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.0',
+    sidebar: {"position":"left","width":300,"display":"hide","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: true,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Java类集（数据结构-多线程）-java.util.*动态数组(当元素个数达到最大值时，动态增加容量) 1.Java类集产生-JDK1.2动态数组：解决定长问题 1.2 Collection接口-单个对象保存的最顶层父接口  Collection接口及其子接口，在每次进行数据操作时只能对单个对象进行处理。 public interface Collection extends Iterable">
+<meta name="keywords" content="java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合框架">
+<meta property="og:url" content="https://beerNewbie.github.io/2019/04/24/Java集合框架/index.html">
+<meta property="og:site_name" content="BeerBlog">
+<meta property="og:description" content="Java类集（数据结构-多线程）-java.util.*动态数组(当元素个数达到最大值时，动态增加容量) 1.Java类集产生-JDK1.2动态数组：解决定长问题 1.2 Collection接口-单个对象保存的最顶层父接口  Collection接口及其子接口，在每次进行数据操作时只能对单个对象进行处理。 public interface Collection extends Iterable">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-24T14:24:38.078Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java集合框架">
+<meta name="twitter:description" content="Java类集（数据结构-多线程）-java.util.*动态数组(当元素个数达到最大值时，动态增加容量) 1.Java类集产生-JDK1.2动态数组：解决定长问题 1.2 Collection接口-单个对象保存的最顶层父接口  Collection接口及其子接口，在每次进行数据操作时只能对单个对象进行处理。 public interface Collection extends Iterable">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="https://beerNewbie.github.io/2019/04/24/Java集合框架/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java集合框架 | BeerBlog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BeerBlog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://beerNewbie.github.io/2019/04/24/Java集合框架/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Beer">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BeerBlog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java集合框架
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-24 22:21:41 / 修改时间：22:24:38" itemprop="dateCreated datePublished" datetime="2019-04-24T22:21:41+08:00">2019-04-24</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JavaSE基础/" itemprop="url" rel="index"><span itemprop="name">JavaSE基础</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/04/24/Java集合框架/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/04/24/Java集合框架/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Java类集（数据结构-多线程）-java-util"><a href="#Java类集（数据结构-多线程）-java-util" class="headerlink" title="Java类集（数据结构-多线程）-java.util.*"></a>Java类集（数据结构-多线程）-java.util.*</h3><p><a href>动态数组(当元素个数达到最大值时，动态增加容量)</a></p>
+<h4 id="1-Java类集产生-JDK1-2"><a href="#1-Java类集产生-JDK1-2" class="headerlink" title="1.Java类集产生-JDK1.2"></a>1.Java类集产生-JDK1.2</h4><p><strong>动态数组：解决定长问题</strong></p>
+<h5 id="1-2-Collection接口-单个对象保存的最顶层父接口"><a href="#1-2-Collection接口-单个对象保存的最顶层父接口" class="headerlink" title="1.2 Collection接口-单个对象保存的最顶层父接口"></a>1.2 Collection接口-<a href>单个对象</a>保存的最顶层父接口</h5><ul>
+<li style="list-style: none"><input type="checkbox" checked> Collection接口及其子接口，在每次进行数据操作时只能对单个对象进行处理。</li>
+<li>public interface Collection<e> extends Iterable<e></e></e></li>
+<li style="list-style: none"><input type="checkbox" checked> Iterable<e>:迭代器接口（就是为了遍历集合）</e></li>
+<li style="list-style: none"><input type="checkbox" checked> iterator<t> iterator();(取得集合的迭代器，JDK1.5之前直接写在Collection接口中)</t></li>
+<li style="list-style: none"><input type="checkbox" checked> Collection接口中提供的核心方法：</li>
+<li><a href>add(T t):向类集中添加元素</a></li>
+<li><a href>iterator():取得类集的迭代器</a></li>
+<li>Collection接口只定义了存储数据的标准，但无法区分存储类型。因此在实际中往往使用两个子接口List（允许数据重复）、Set（不允许数据重复）。一般不直接使用Collection接口。<h4 id="2-List接口"><a href="#2-List接口" class="headerlink" title="2.List接口"></a>2.List接口</h4>在进行单个集合处理时，优先考虑List接口</li>
+<li style="list-style: none"><input type="checkbox" checked> 在List接口中拓展了两个重要方法（List接口独有）</li>
+<li>public E get(int index) :根据索引下标取得数据；</li>
+<li>public E set(int index,E element) :根据索引下标更新数据，返回修改前数据</li>
+<li style="list-style: none"><input type="checkbox" checked> List接口有三个重要子类<a href>ArrayList(90%)、Vector、LinkedList</a>,这三个子类在使用上没有任何区别</li>
+<li style="list-style: none"><input type="checkbox" checked> List接口要保存自定义类的对象，该类必须覆写equals()来使用contains()、remove()等方法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">//覆写equals()方法</span><br><span class="line">@Override</span><br><span class="line">public boolean equals(Object obj) &#123;</span><br><span class="line">    if (obj == this) &#123;</span><br><span class="line">        return true;</span><br><span class="line">    &#125;else if (obj == null) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;else if (!(obj instanceof Person)) &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">    //向下转型还原为Person对象</span><br><span class="line">    Person person = (Person) obj;</span><br><span class="line">    retrun this.age.equals(per.age) &amp;&amp; this.name.equals(per.name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="Important-ArrayList、Vector、LinkedList的区别："><a href="#Important-ArrayList、Vector、LinkedList的区别：" class="headerlink" title="[Important]:==ArrayList、Vector、LinkedList的区别：=="></a>[Important]:==ArrayList、Vector、LinkedList的区别：==</h5><ul>
+<li style="list-style: none"><input type="checkbox"> ArrayList、LinkedList的区别： </li>
+<li>1、出现版本：ArrayList –&gt;JDK1.2 而Vector–&gt;JDK1.0(出现在List、Collection接口之前)</li>
+<li>2、初始化策略区别：Vector在无参构造执行后将对象数组大小初始化为10；ArrayList采用懒加载策略，在构造方法阶段并不初始化对象数组，在第一次添加元素时才初始化对象数组大小为10</li>
+<li>3、扩容策略：ArrayList扩容时，新数组变为原数组的1.5倍，Vector扩容时，新数组大小变为原数组的2倍；</li>
+<li>4、线程安全性：ArrayList采用异步处理，线程不安全，效率较高；Vector采用方法上加锁(synchronized关键字(同步的，代表这个方法加锁))，线程安全，效率较低。（即便使用线程安全的List，也不用Vector）</li>
+<li>5、遍历：Vector支持较老的Enumeration，ArrayList不支持，ArrayList支持Iterator、ListIterator、foreach；Vector支持Iterator、ListIterator、foreach、<br>Enumeration。</li>
+<li style="list-style: none"><input type="checkbox"> ArrayList、Vector的共同点：底层均使用数组实现</li>
+<li style="list-style: none"><input type="checkbox" checked> ArrayList、LinkedList区别：LinkedList底层采用双向链表实现，ArrayList底层采用数组实现<h3 id="3-Set接口"><a href="#3-Set接口" class="headerlink" title="3.Set接口"></a>3.Set接口</h3></li>
+<li style="list-style: none"><input type="checkbox" checked> <strong>不允许数据重复（Set接口就是Value值相同的Map集合，先有Map才有Set），Set接口没有扩充方法</strong><h4 id="Set接口常用子类："><a href="#Set接口常用子类：" class="headerlink" title="Set接口常用子类："></a>Set接口常用子类：</h4><h5 id="HashSet（无序存储）-HashMap："><a href="#HashSet（无序存储）-HashMap：" class="headerlink" title="HashSet（无序存储）-HashMap："></a>HashSet（无序存储）-HashMap：</h5></li>
+<li style="list-style: none"><input type="checkbox"> 1、底层使用 哈希表+红黑树</li>
+<li style="list-style: none"><input type="checkbox"> 2、允许存放null，无序存储<h5 id="TreeSet（有序存储）-TreeMap：Comparable、Compartor"><a href="#TreeSet（有序存储）-TreeMap：Comparable、Compartor" class="headerlink" title="TreeSet（有序存储）- TreeMap：Comparable、Compartor"></a>TreeSet（有序存储）- TreeMap：Comparable、Compartor</h5></li>
+<li style="list-style: none"><input type="checkbox"> 1、底层使用红黑树</li>
+<li style="list-style: none"><input type="checkbox"> 2、不允许出现null，有序存储</li>
+<li style="list-style: none"><input type="checkbox"> 3、自定义类要想保存到TreeSet中，要么实现Comparable接口，要么向TreeSet传入比较器（Comparator接口）<h6 id="Comparable与Commparator的区别："><a href="#Comparable与Commparator的区别：" class="headerlink" title="Comparable与Commparator的区别："></a>Comparable与Commparator的区别：</h6></li>
+<li style="list-style: none"><input type="checkbox"> 在Java中，若想实现自定义类的比较，提供了以下两个接口：<blockquote>
+<p><strong>java.lang.Comparable接口（内部比较器）-排序接口</strong>：</p>
+</blockquote>
+</li>
+<li>若一个类实现了Comparable接口，就意味着该类支持排序。存放该类的Collection或数组，可以直接通过Collections.sort()或Array.sort()进行排序。</li>
+<li>实现了Comparable接口的类可以直接放在TreeSet或TreeMap中</li>
+<li><a href>public int compareTo(); 返回值三种情况：</a><strong>返回正数</strong>：表示当前对象大于目标对象；<strong>返回0</strong>：表示当前对象等于目标对象；<strong>返回负数</strong> ：表示当前对象小于目标对象<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//覆写compareTo,自定义Person类如何比较大小（按年龄）</span><br><span class="line">@Override</span><br><span class="line">public int compareTo(Person o) &#123;</span><br><span class="line">    if (this.age &gt; o.age) &#123;</span><br><span class="line">        return 1;</span><br><span class="line">    &#125;else if (this.age &lt; o.age) &#123;</span><br><span class="line">        return -1;</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">        return this.name.compareTo(o.name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p><strong>Comparator(外部排序接口):</strong></p>
+<ul>
+<li>若要控制某个自定义类的顺序，而该类本身不支持排序（该类本身没有实现Comparable接口）。我们可以建立一个该类的“比较器”来进行排序。比较器实现Comparator接口即可。</li>
+<li>“比较器”：实现了Comparator接口的类作为比较器，通过该比较器来进行类的排序。</li>
+<li><a href>public int compare(T o1, T o2);返回值与compareTo返回值完全一样：</a>返回正数：o1 &gt; o2;返回0：o1 = o2;返回负数：o1 &lt; o2;</li>
+<li>实现了Comparator接口进行第三方排序- <strong>策略模式</strong> ，此方法更加灵活，可以轻松改变策略进行第三方的排序算法<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//Person类的比较器</span><br><span class="line">class AscAgeComparator implements Comparator&lt;Person&gt; &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public int compare(Person o1,Person o2) &#123;</span><br><span class="line">        reeturn o1.getAge() - o2.getAge();</span><br><span class="line">    &#125;</span><br><span class="line">    //只重写了compare方法，而equals方法在Object类中就已经写了</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<h5 id="Comparable接口与Comparator接口的关系："><a href="#Comparable接口与Comparator接口的关系：" class="headerlink" title="Comparable接口与Comparator接口的关系："></a>Comparable接口与Comparator接口的关系：</h5><ul>
+<li style="list-style: none"><input type="checkbox" checked> Comparable 是排序接口，若一个类实现了Comparable接口，意味着该类支持排序，是一个内部比较器（自己和别人去比）</li>
+<li style="list-style: none"><input type="checkbox" checked> Comparator接口是比较器接口，类本身不支持排序，专门有若干个第三方的比较器（实现了Comparator接口）来进行排序比较，是一个外部比较器（策略模式）<h5 id="重复元素的判断："><a href="#重复元素的判断：" class="headerlink" title="重复元素的判断："></a>重复元素的判断：</h5></li>
+<li style="list-style: none"><input type="checkbox" checked> TreeSet与TreeMap依靠Comparator或Comparable接口来区分重复元素。<h5 id="自定义类要想保存在TreeMap或TreeSet中："><a href="#自定义类要想保存在TreeMap或TreeSet中：" class="headerlink" title="自定义类要想保存在TreeMap或TreeSet中："></a>自定义类要想保存在TreeMap或TreeSet中：</h5></li>
+<li style="list-style: none"><input type="checkbox"> 要么该类直接实现Comparable接口，覆写compareTo方法</li>
+<li style="list-style: none"><input type="checkbox"> 要么实现一个比较器，传入TreeSet或TreeMap来进行外部比较<h5 id="而HashSet与HashMap并不依赖比较接口。此时要想区分自定义元素是否重复，需要同时覆写equals与hashCode方法"><a href="#而HashSet与HashMap并不依赖比较接口。此时要想区分自定义元素是否重复，需要同时覆写equals与hashCode方法" class="headerlink" title="而HashSet与HashMap并不依赖比较接口。此时要想区分自定义元素是否重复，需要同时覆写equals与hashCode方法"></a>而HashSet与HashMap并不依赖比较接口。此时要想区分自定义元素是否重复，需要同时覆写equals与hashCode方法</h5></li>
+<li style="list-style: none"><input type="checkbox"> 首先覆写equals()方法来判定元素内容是否相等。</li>
+<li style="list-style: none"><input type="checkbox"> 覆写equals方法原则：</li>
+<li>自反性：对于任何非空引用值想x, x.equals(x)都返回true</li>
+<li>对称性：对于任何非空x,y,当且仅当x.equals(y)返回true，y.equals(x)也返回true</li>
+<li>传递性：对于任何非空x,y,z,若x.equals(y)返回true，y.equals(z)返回true，一定有x.equals(z)返回true</li>
+<li>一致性：对于任何非空的x,y,若想x与y的属性没有发生改变，则多次调用x.equals(y)始终返回true或false</li>
+<li>非空性：对于任何的非空x，x.equals(null)一定返回false</li>
+<li style="list-style: none"><input type="checkbox"> 先调用hashCode计算出hash码决定存放的数据桶，而后使用equals来比较元素是否相等，若相等，则不放置元素；若equals返回false。则在相同桶之后，使用链表将若干元素链起来。（先hashCode，若在一个数据桶再equals）</li>
+<li><p>Object类提供的hashCode方法默认使用对象的地址进行hash</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//覆写hashCode ，把两个值做hash，而不是地址，hashCode保证属性值相同的元素一定在一个桶中，equals方法保证若是不一个东西就set</span><br><span class="line">public int hashCode() &#123;</span><br><span class="line">    return Objects.hash(age,name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>[ ] <strong>若两个equals方法返回true，他们的hashCode必然保证相等（相同值的hash码一定相等）。但两对象的hashCode相等equals不一定相等，当且仅当equals与hashCode均返回true，才认为两个对象真的相等</strong></p>
+</li>
+<li style="list-style: none"><input type="checkbox"> 哈希表：优化查找次数<h3 id="4-集合输出-迭代器输出-Iterator接口"><a href="#4-集合输出-迭代器输出-Iterator接口" class="headerlink" title="4. 集合输出(迭代器输出)-Iterator接口"></a>4. 集合输出(迭代器输出)-Iterator接口</h3></li>
+<li style="list-style: none"><input type="checkbox"> 迭代器：为了遍历集合而生。-迭代器模式<h4 id="Iterator接口的两个核心方法："><a href="#Iterator接口的两个核心方法：" class="headerlink" title="Iterator接口的两个核心方法："></a>Iterator接口的两个核心方法：</h4></li>
+<li style="list-style: none"><input type="checkbox"> <a href>boolean hasNext(); 判断是否还有元素</a></li>
+<li style="list-style: none"><input type="checkbox"> <a href>E next(); 取得下一个元素</a><h5 id="4-1迭代器输出Iterator-只能从前向后输出"><a href="#4-1迭代器输出Iterator-只能从前向后输出" class="headerlink" title="4.1迭代器输出Iterator-只能从前向后输出"></a>4.1迭代器输出Iterator-只能从前向后输出</h5></li>
+<li style="list-style: none"><input type="checkbox"> 调用Collection集合的子类Iterator方法取得内置迭代器，使用以下格式输出：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">while (iterator.hasNext()) &#123;</span><br><span class="line">    System.out.println(iterator.next());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="4-2-双向迭代接口ListIterator-List支持，Set不支持"><a href="#4-2-双向迭代接口ListIterator-List支持，Set不支持" class="headerlink" title="4.2 双向迭代接口ListIterator-List支持，Set不支持"></a>4.2 双向迭代接口ListIterator-List支持，Set不支持</h5><ul>
+<li style="list-style: none"><input type="checkbox"> 除了hasNext与next方法外，还有：</li>
+<li>hasPrevious():判断是否有上一个元素</li>
+<li>previous：取得上一个元素</li>
+<li style="list-style: none"><input type="checkbox"> 要想使用从后向前遍历输出，首先至少要从前向后遍历一次才可使用<h5 id="4-3-Enumeration（JDK1-0）枚举输出-Vector类支持"><a href="#4-3-Enumeration（JDK1-0）枚举输出-Vector类支持" class="headerlink" title="4.3 Enumeration（JDK1.0）枚举输出-Vector类支持"></a>4.3 Enumeration（JDK1.0）枚举输出-Vector类支持</h5></li>
+<li style="list-style: none"><input type="checkbox"> hasMoreElements():判断是否有下一个元素</li>
+<li style="list-style: none"><input type="checkbox"> nextElements():取得下一个元素<h5 id="4-4-for-each输出（所有子类都满足）"><a href="#4-4-for-each输出（所有子类都满足）" class="headerlink" title="4.4 for-each输出（所有子类都满足）"></a>4.4 for-each输出（所有子类都满足）</h5></li>
+<li style="list-style: none"><input type="checkbox"> 能使用for-each输出的本质在于各个集合类都内置迭代器</li>
+</ul>
+<h5 id="fail-fast机制："><a href="#fail-fast机制：" class="headerlink" title="fail-fast机制："></a>fail-fast机制：</h5><ul>
+<li><p>[ ] ConcurrentModificationExcetion发生在Collection集合使用迭代器遍历时，使用了集合类提供的修改集合内容方法报错。而如果使用Iterator迭代器的remove()不会出现此错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//出错机制：</span><br><span class="line">final void checkForComodification() &#123;</span><br><span class="line">    if (modCount != expectedModCount)</span><br><span class="line">        throw new ConcurrentModificationException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Collection 集合中的modCount表示当前集合的修改次数</p>
+</li>
+<li>expectModcount是迭代器中记录当前集合的修改次数，当取得集合迭代器时（即调用list.iterator()）,exceptedModCount = modCount，换言之，迭代器就是当前集合的一个副本。</li>
+<li>快速失败策略保证了所有用户在进行迭代遍历集合时，拿到的数据一定是最新的数据。（避免“脏读产生”）</li>
+<li><strong>fail-safe:</strong> 不产生ConCurrentModificationException异常，jar包下所有的线程安全集合（CopyOnWriteArrayList）</li>
+<li><strong>总结：以后在迭代器遍历时，不要修改集合内容</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">//eg：</span><br><span class="line">public class Test &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        List&lt;Strring&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">        Collections.addAll(list,&quot;A&quot;,&quot;B&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,&quot;E&quot;);</span><br><span class="line">        //modCount = 6</span><br><span class="line">        Iterator&lt;String&gt; iterator = list.iterator();</span><br><span class="line">        //取得集合迭代器（取得当前集合的副本）</span><br><span class="line">        //expectedModCount = 6</span><br><span class="line">        while(iterator.hasNext()) &#123;</span><br><span class="line">            //调用checkForComodification检查副本中的exceptedModCount是否等于集合的modCount</span><br><span class="line">            String str = iterator.next();</span><br><span class="line">            if (strr.equals(&quot;B&quot;)) &#123;</span><br><span class="line">                //list.remove(&quot;B&quot;);//集合类提供的remove方法，报错：ConcurrentModeficationException;</span><br><span class="line">                iterator.remove(&quot;B&quot;);//正确</span><br><span class="line">                continue;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(str);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="5-Map集合"><a href="#5-Map集合" class="headerlink" title="5.Map集合"></a>5.Map集合</h2><h5 id="Map接口是Java中保存二元偶对象（键值对）的最顶层接口"><a href="#Map接口是Java中保存二元偶对象（键值对）的最顶层接口" class="headerlink" title="Map接口是Java中保存二元偶对象（键值对）的最顶层接口"></a>Map接口是Java中保存二元偶对象（键值对）的最顶层接口</h5><p><a href>public interface Map&lt;K,V&gt; key值唯一，通过key值一定能唯一找到一个value值</a></p>
+<h5 id="Map接口中的核心方法："><a href="#Map接口中的核心方法：" class="headerlink" title="Map接口中的核心方法："></a>Map接口中的核心方法：</h5><ul>
+<li><strong>public V put(K key,V value):向Map中添加数据</strong></li>
+<li><strong>public V get(K key) :根据指定的key值取得相应的value值，若没有key值则返回null</strong></li>
+<li><a href>public Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet() : 将Map集合变为Set集合</a></li>
+<li><strong>public Set<k> keySet()</k></strong> : 返回所有key值，<strong>key不能重复</strong>。</li>
+<li><strong>public Collection<v> values()</v></strong> : 返回所有value值，<strong>value可以重复</strong>。<h4 id="Map接口有如下常用子类："><a href="#Map接口有如下常用子类：" class="headerlink" title="Map接口有如下常用子类："></a>Map接口有如下常用子类：</h4><a href>HashMap、TreeMap、HashTable、ConcurrentHashMap</a></li>
+</ul>
+<h4 id="HashMap与HashTable区别："><a href="#HashMap与HashTable区别：" class="headerlink" title="HashMap与HashTable区别："></a>HashMap与HashTable区别：</h4><ul>
+<li style="list-style: none"><input type="checkbox"> HashMap-类比HashSet</li>
+<li>1.允许key和value为null，且key值有且只有一个为null，value可以有任意多个为null</li>
+<li>2.JDK1.2产生</li>
+<li>3.异步处理效率高，线程不安全</li>
+<li>4.底层：hash表+红黑树（JDK8）</li>
+<li style="list-style: none"><input type="checkbox"> HashTable</li>
+<li>1.key与value均不为null</li>
+<li>2.JDK1.0产生</li>
+<li>3.使用方法加锁，效率低，线程安全</li>
+<li>4.底层hash表<h4 id="Map集合使用迭代器输出："><a href="#Map集合使用迭代器输出：" class="headerlink" title="Map集合使用迭代器输出："></a>Map集合使用迭代器输出：</h4></li>
+<li style="list-style: none"><input type="checkbox"> Set&lt;Map.Entry&lt;K,V&gt;&gt; entrySet():将Map集合转为Set集合<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public class TestMapIterator &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        Map&lt;Integer, String&gt; map = new HashMap&lt;&gt;();</span><br><span class="line">        map.put(1, &quot;Java&quot;);</span><br><span class="line">        map.put(2, &quot;C++&quot;);</span><br><span class="line">        map.put(3, &quot;Python&quot;);</span><br><span class="line">        //Map——&gt;Set</span><br><span class="line">        Set&lt;Map.Entry&lt;Integer, String&gt;&gt; set = map.entrySet();</span><br><span class="line">        //取得Set接口迭代器</span><br><span class="line">        Iterator&lt;Map.Entry&lt;Integer, String&gt;&gt; iterator = set.iterator();</span><br><span class="line">        //迭代输出</span><br><span class="line">        while (iterator.hasNext()) &#123;</span><br><span class="line">            Map.Entry&lt;Integer, String&gt; entry = iterator.next();</span><br><span class="line">            System.out.println(entry.getKey() + &quot;=&quot; + entry.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="6-栈和队列"><a href="#6-栈和队列" class="headerlink" title="6.栈和队列"></a>6.栈和队列</h3><h4 id="栈：先入后出-Vector"><a href="#栈：先入后出-Vector" class="headerlink" title="栈：先入后出-Vector"></a>栈：先入后出-Vector</h4><p> <strong>应用：</strong> 函数栈帧，浏览器网页的后腿，安卓Activity的后退 ，编译器撤销</p>
+<ul>
+<li>入栈：push</li>
+<li>出栈：pop</li>
+<li>返回栈顶元素但不出栈：peek()</li>
+<li style="list-style: none"><input type="checkbox"> 自己实现一个html识别器：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">    public static void mian(String[] args) &#123;</span><br><span class="line">        Stack stack = new Stack();</span><br><span class="line">        stack.push(1);</span><br><span class="line">        stack.push(2);</span><br><span class="line">        stack.push(3);</span><br><span class="line">        System.out.println(stack.peek());//3</span><br><span class="line">        System.out.println(stack.pop());//3</span><br><span class="line">        System.out.println(stack.pop());//2</span><br><span class="line">        System.out.println(stack.pop());//1</span><br><span class="line">        System.out.println(stack.pop());//报错：EmptyStackException</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="队列FIFO：先入先出"><a href="#队列FIFO：先入先出" class="headerlink" title="队列FIFO：先入先出"></a>队列FIFO：先入先出</h4><p><strong>Queue接口-LinkedList</strong></p>
+<p><a href>Queue<integer> queue = new LinkedList&lt;&gt;();</integer></a> </p>
+<ul>
+<li>入队列：add()</li>
+<li>出队列：poll()</li>
+<li>返回队列头元素，不出对：peek()</li>
+<li>消息队列：kafka,RobitMQ<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class Test &#123;</span><br><span class="line">     public static void mian(String[] args) &#123;</span><br><span class="line">         Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();</span><br><span class="line">         queue.push(1);</span><br><span class="line">         queue.push(2);</span><br><span class="line">         queue.push(3);</span><br><span class="line">         System.out.println(stack.peek());//1</span><br><span class="line">         System.out.println(stack.poll());//1</span><br><span class="line">         System.out.println(stack.poll());//2</span><br><span class="line">         System.out.println(stack.poll());//3</span><br><span class="line">         System.out.println(stack.poll());//null</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="7-资源文件操作（Properties属性文件）"><a href="#7-资源文件操作（Properties属性文件）" class="headerlink" title="7.资源文件操作（Properties属性文件）"></a>7.资源文件操作（Properties属性文件）</h3><p>**资源文件内容都是k-v 格式，并且无论key、value都是String类型</p>
+<h5 id="设置属性"><a href="#设置属性" class="headerlink" title="设置属性"></a>设置属性</h5><ul>
+<li>setProperty(String key,String value) 返回Object<h5 id="取得属性"><a href="#取得属性" class="headerlink" title="取得属性"></a>取得属性</h5></li>
+<li>getProperty(String key,String value) 返回String,若没有指定key，返回null</li>
+<li>getProperty(String key,String defaultValue):若没有指定key值返回默认值<h5 id="将资源内容输入输出到目标终端"><a href="#将资源内容输入输出到目标终端" class="headerlink" title="将资源内容输入输出到目标终端"></a>将资源内容输入输出到目标终端</h5></li>
+<li>输出到目标终端：store(OutputStream out,String comments);</li>
+<li>从目标终端中读取数据：load(InputStream in);<h3 id="8-Collections工具类"><a href="#8-Collections工具类" class="headerlink" title="8.Collections工具类"></a>8.Collections工具类</h3><h5 id="1-将线程不安全的集合包装为线程安全的集合"><a href="#1-将线程不安全的集合包装为线程安全的集合" class="headerlink" title="1.将线程不安全的集合包装为线程安全的集合"></a>1.将线程不安全的集合包装为线程安全的集合</h5></li>
+<li style="list-style: none"><input type="checkbox"> 在add、remove等方法修改上使用了同步代码块保证线程安全，效率较低。<strong>要使用线程安全集合，推荐使用juc包下的并发集合类（ConcurrentHashMap、CopyOnWriteArrayList）</strong></li>
+<li style="list-style: none"><input type="checkbox"> 集合排序</li>
+<li>Collection.sort(集合名称)</li>
+<li style="list-style: none"><input type="checkbox"> 集合反转</li>
+<li>Collections.reverse(集合名称)<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">public class TestCollections01 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        List&lt;String&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">        //向集合中一次添加多个元素</span><br><span class="line">        Collections.addAll(list, &quot;A&quot;, &quot;a&quot;, &quot;k&quot;, &quot;K&quot;, &quot;B&quot;, &quot;b&quot;);</span><br><span class="line">        //集合排序</span><br><span class="line">        Collections.sort(list);</span><br><span class="line">        Iterator&lt;String&gt; iterator = list.iterator();</span><br><span class="line">        while (iterator.hasNext()) &#123;</span><br><span class="line">            System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(&quot;\n&quot;);</span><br><span class="line">        iterator = list.iterator();</span><br><span class="line">        //集合反转</span><br><span class="line">        Collections.reverse(list);</span><br><span class="line">        while (iterator.hasNext()) &#123;</span><br><span class="line">            System.out.print(iterator.next() + &quot; &quot;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/**</span><br><span class="line"> * 结果：</span><br><span class="line"> * A B K a b k</span><br><span class="line"> *</span><br><span class="line"> * k b a K B A</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="9-Stream数据流-Collection接口"><a href="#9-Stream数据流-Collection接口" class="headerlink" title="9.Stream数据流:Collection接口"></a>9.Stream数据流:Collection接口</h3><p><a href>核心方法:取得Stream流 Stream<e> stream()</e></a></p>
+<h5 id="常用方法："><a href="#常用方法：" class="headerlink" title="常用方法："></a>常用方法：</h5><ul>
+<li style="list-style: none"><input type="checkbox"> forEach:集合输出</li>
+<li style="list-style: none"><input type="checkbox"> filter:数据过滤</li>
+<li style="list-style: none"><input type="checkbox"> 取得最大最小值：max/min<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public class TestStream01 &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        List&lt;Integer&gt; list = new LinkedList&lt;&gt;();</span><br><span class="line">        Collections.addAll(list, 1, 2, 3, 4, 5, 6);</span><br><span class="line">        //list.forEach(System.out::print);</span><br><span class="line">        Stream&lt;Integer&gt; stream = list.stream();</span><br><span class="line">        //偶数个数</span><br><span class="line">   /*     System.out.println(&quot;count = &quot; +</span><br><span class="line">                stream.filter(e -&gt; e % 2 == 0).count());*/</span><br><span class="line">        //求集合中的最大最小值</span><br><span class="line">        System.out.println(stream.max(Integer::compareTo)</span><br><span class="line">                .get());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="Map-Reduce模型"><a href="#Map-Reduce模型" class="headerlink" title="Map/Reduce模型"></a>Map/Reduce模型</h5><ul>
+<li style="list-style: none"><input type="checkbox"> map():前期数据的处理</li>
+<li style="list-style: none"><input type="checkbox"> reduce():数据处理后的收集<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">class Goods &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private Integer count;</span><br><span class="line">    private Double price;</span><br><span class="line"></span><br><span class="line">    public Goods(String name, Integer count, Double price) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">        this.count = count;</span><br><span class="line">        this.price = price;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer getCount() &#123;</span><br><span class="line">        return count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setCount(Integer count) &#123;</span><br><span class="line">        this.count = count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Double getPrice() &#123;</span><br><span class="line">        return price;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setPrice(Double price) &#123;</span><br><span class="line">        this.price = price;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">public class TestMapAndReduce &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        List&lt;Goods&gt; list = new ArrayList&lt;&gt;();</span><br><span class="line">        list.add(new Goods(&quot;HUAWEI&quot;,500,6000.00));</span><br><span class="line">        list.add(new Goods(&quot;APPLE&quot;,200,7000.00));</span><br><span class="line">        list.add(new Goods(&quot;XIAOMI&quot;,600,3000.00));</span><br><span class="line">        list.add(new Goods(&quot;OPPO&quot;,300,3500.00));</span><br><span class="line">        Double costs = list.stream()</span><br><span class="line">                .map(obj -&gt; obj.getCount()*obj.getPrice())</span><br><span class="line">                .reduce((sum,x) -&gt; sum+x).get();</span><br><span class="line">        System.out.println(costs);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//结果：7250000.0</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div></div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.png" alt="Beer 微信支付">
+        <p>微信支付</p>
+      </div>
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/alipay.png" alt="Beer 支付宝">
+        <p>支付宝</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Beer</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="https://beerNewbie.github.io/2019/04/24/Java集合框架/" title="Java集合框架">https://beerNewbie.github.io/2019/04/24/Java集合框架/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/22/快速排序/" rel="next" title="快速排序">
+                <i class="fa fa-chevron-left"></i> 快速排序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+            <a href="/">
+              <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Beer">
+            </a>
+            
+              <p class="site-author-name" itemprop="name">Beer</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">3</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/beerNewbie" title="GitHub &rarr; https://github.com/beerNewbie" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/2064741904" title="QQ &rarr; 2064741904"><i class="fa fa-fw fa-qq"></i>QQ</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="/2064741904@qq.com" title="E-Mail &rarr; 2064741904@qq.com"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://stackoverflow.com/Beer1" title="StackOverflow &rarr; https://stackoverflow.com/Beer1" rel="noopener" target="_blank"><i class="fa fa-fw fa-stack-overflow"></i>StackOverflow</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java类集（数据结构-多线程）-java-util"><span class="nav-number">1.</span> <span class="nav-text">Java类集（数据结构-多线程）-java.util.*</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Java类集产生-JDK1-2"><span class="nav-number">1.1.</span> <span class="nav-text">1.Java类集产生-JDK1.2</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-Collection接口-单个对象保存的最顶层父接口"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.2 Collection接口-单个对象保存的最顶层父接口</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-List接口"><span class="nav-number">1.2.</span> <span class="nav-text">2.List接口</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Important-ArrayList、Vector、LinkedList的区别："><span class="nav-number">1.2.1.</span> <span class="nav-text">[Important]:==ArrayList、Vector、LinkedList的区别：==</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Set接口"><span class="nav-number">2.</span> <span class="nav-text">3.Set接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Set接口常用子类："><span class="nav-number">2.1.</span> <span class="nav-text">Set接口常用子类：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#HashSet（无序存储）-HashMap："><span class="nav-number">2.1.1.</span> <span class="nav-text">HashSet（无序存储）-HashMap：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TreeSet（有序存储）-TreeMap：Comparable、Compartor"><span class="nav-number">2.1.2.</span> <span class="nav-text">TreeSet（有序存储）- TreeMap：Comparable、Compartor</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Comparable与Commparator的区别："><span class="nav-number">2.1.2.1.</span> <span class="nav-text">Comparable与Commparator的区别：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Comparable接口与Comparator接口的关系："><span class="nav-number">2.1.3.</span> <span class="nav-text">Comparable接口与Comparator接口的关系：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#重复元素的判断："><span class="nav-number">2.1.4.</span> <span class="nav-text">重复元素的判断：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自定义类要想保存在TreeMap或TreeSet中："><span class="nav-number">2.1.5.</span> <span class="nav-text">自定义类要想保存在TreeMap或TreeSet中：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#而HashSet与HashMap并不依赖比较接口。此时要想区分自定义元素是否重复，需要同时覆写equals与hashCode方法"><span class="nav-number">2.1.6.</span> <span class="nav-text">而HashSet与HashMap并不依赖比较接口。此时要想区分自定义元素是否重复，需要同时覆写equals与hashCode方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-集合输出-迭代器输出-Iterator接口"><span class="nav-number">3.</span> <span class="nav-text">4. 集合输出(迭代器输出)-Iterator接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Iterator接口的两个核心方法："><span class="nav-number">3.1.</span> <span class="nav-text">Iterator接口的两个核心方法：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#4-1迭代器输出Iterator-只能从前向后输出"><span class="nav-number">3.1.1.</span> <span class="nav-text">4.1迭代器输出Iterator-只能从前向后输出</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-双向迭代接口ListIterator-List支持，Set不支持"><span class="nav-number">3.1.2.</span> <span class="nav-text">4.2 双向迭代接口ListIterator-List支持，Set不支持</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-3-Enumeration（JDK1-0）枚举输出-Vector类支持"><span class="nav-number">3.1.3.</span> <span class="nav-text">4.3 Enumeration（JDK1.0）枚举输出-Vector类支持</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-4-for-each输出（所有子类都满足）"><span class="nav-number">3.1.4.</span> <span class="nav-text">4.4 for-each输出（所有子类都满足）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#fail-fast机制："><span class="nav-number">3.1.5.</span> <span class="nav-text">fail-fast机制：</span></a></li></ol></li></ol></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Map集合"><span class="nav-number"></span> <span class="nav-text">5.Map集合</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Map接口是Java中保存二元偶对象（键值对）的最顶层接口"><span class="nav-number">0.0.1.</span> <span class="nav-text">Map接口是Java中保存二元偶对象（键值对）的最顶层接口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Map接口中的核心方法："><span class="nav-number">0.0.2.</span> <span class="nav-text">Map接口中的核心方法：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Map接口有如下常用子类："><span class="nav-number">0.1.</span> <span class="nav-text">Map接口有如下常用子类：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HashMap与HashTable区别："><span class="nav-number">0.2.</span> <span class="nav-text">HashMap与HashTable区别：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Map集合使用迭代器输出："><span class="nav-number">0.3.</span> <span class="nav-text">Map集合使用迭代器输出：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-栈和队列"><span class="nav-number">1.</span> <span class="nav-text">6.栈和队列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#栈：先入后出-Vector"><span class="nav-number">1.1.</span> <span class="nav-text">栈：先入后出-Vector</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#队列FIFO：先入先出"><span class="nav-number">1.2.</span> <span class="nav-text">队列FIFO：先入先出</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-资源文件操作（Properties属性文件）"><span class="nav-number">2.</span> <span class="nav-text">7.资源文件操作（Properties属性文件）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#设置属性"><span class="nav-number">2.0.1.</span> <span class="nav-text">设置属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#取得属性"><span class="nav-number">2.0.2.</span> <span class="nav-text">取得属性</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#将资源内容输入输出到目标终端"><span class="nav-number">2.0.3.</span> <span class="nav-text">将资源内容输入输出到目标终端</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-Collections工具类"><span class="nav-number">3.</span> <span class="nav-text">8.Collections工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-将线程不安全的集合包装为线程安全的集合"><span class="nav-number">3.0.1.</span> <span class="nav-text">1.将线程不安全的集合包装为线程安全的集合</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-Stream数据流-Collection接口"><span class="nav-number">4.</span> <span class="nav-text">9.Stream数据流:Collection接口</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#常用方法："><span class="nav-number">4.0.1.</span> <span class="nav-text">常用方法：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Map-Reduce模型"><span class="nav-number">4.0.2.</span> <span class="nav-text">Map/Reduce模型</span></a></li></ol></li></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Beer</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.0</div>
+
+
+
+<span id="busuanzi_container_site_uv">
+  本站访问次数：<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+</span>
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.0"></script>
+
+  <script src="/js/motion.js?v=7.1.0"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.0"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.0"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.0"></script>
+<script src="/js/post-details.js?v=7.1.0"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.0"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'y5EWCGvkSAod4re7R9v6ogun-gzGzoHsz',
+    appKey: '19dg6XWan9mHYM1XB3NAiyRb',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+  <script>
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url).replace(/\/{2,}/g, '/');
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x"></i></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x"></i></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
