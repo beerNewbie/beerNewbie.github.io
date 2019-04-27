@@ -1826,7 +1826,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ff5457;
+  background: #f0999f;
 }
 .feed-link,
 .chat {
@@ -3018,33 +3018,105 @@ ul.breadcrumb li+li:last-child {
     margin: 8px 0 0;
   }
 }
-body {
-  background: url("/images/006.jpg") no-repeat;
-/* 背景图垂直、水平均居中 */
-  background-position: center center;
-/* 当内容高度大于图片高度时，背景图像的位置相对于viewport固定 */
-  background-attachment: fixed;
-/* 让背景图基于容器大小伸缩 */
-  background-size: cover;
-/* 设置背景颜色，背景图加载过程中会显示背景色 */
-  background-color: rgba(0,0,0,0.5);
+@media screen and (min-width: 1200px) {
+  body {
+    background-image: url("/images/16.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: 50% 50%;
+    background-size: cover;
+  }
+  #footer a {
+    color: #eee;
+  }
+  .main-inner {
+    background: #fff;
+    opacity: 0.9;
+  }
+  .posts-expand .post-title-link::before {
+    background-image: linear-gradient(90deg, #a166ab 0%, #ef4e7b 25%, #f37055 50%, #ef4e7b 75%, #a166ab 100%);
+  }
+  code {
+    color: #ff7600;
+    background: #fbf7f8;
+    margin: 2px;
+  }
+  .highlight,
+  pre {
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 3px;
+  }
+  .highlight,
+  code,
+  pre {
+    border: 1px solid #d6d6d6;
+  }
 }
-.sidebar p,
-.sidebar span,
-.sidebar a {
-  color: #000;
+.site-title {
+  font-size: 24px;
+  font-weight: 400;
+  font-family: 'Damion', "PingFang SC", "Microsoft YaHei", sans-serif;
 }
-.header {
-  background: url("https://img-blog.csdnimg.cn/20190420175412651.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0JlZXJfeGlhb2NhaQ==,size_16,color_FFFFFF,t_70") none repeat scroll !important;
+#heart {
+  animation: heartAnimate 1.33s ease-in-out infinite;
 }
-.footer {
-  background: rgba(200,54,54,0.5) none repeat scroll !important;
+.with-love {
+  color: #ff71a8;
 }
-.post {
-  margin-top: 60px;
-  margin-bottom: 60px;
-  padding: 25px;
-  background: rgba(255,255,255,0.9) none repeat scroll !important;
-  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
-  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+@-moz-keyframes heartAnimate {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10%, 30% {
+    transform: scale(0.9);
+  }
+  20%, 40%, 60%, 80% {
+    transform: scale(1.1);
+  }
+  50%, 70% {
+    transform: scale(1.1);
+  }
+}
+@-webkit-keyframes heartAnimate {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10%, 30% {
+    transform: scale(0.9);
+  }
+  20%, 40%, 60%, 80% {
+    transform: scale(1.1);
+  }
+  50%, 70% {
+    transform: scale(1.1);
+  }
+}
+@-o-keyframes heartAnimate {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10%, 30% {
+    transform: scale(0.9);
+  }
+  20%, 40%, 60%, 80% {
+    transform: scale(1.1);
+  }
+  50%, 70% {
+    transform: scale(1.1);
+  }
+}
+@keyframes heartAnimate {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10%, 30% {
+    transform: scale(0.9);
+  }
+  20%, 40%, 60%, 80% {
+    transform: scale(1.1);
+  }
+  50%, 70% {
+    transform: scale(1.1);
+  }
 }
