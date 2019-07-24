@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Linux基本指令</title>
+      <link href="/2019/06/24/Linux%E5%9F%BA%E6%9C%AC%E6%8C%87%E4%BB%A4/"/>
+      <url>/2019/06/24/Linux%E5%9F%BA%E6%9C%AC%E6%8C%87%E4%BB%A4/</url>
+      
+        <content type="html"><![CDATA[<h3 id="Linux基础指令："><a href="#Linux基础指令：" class="headerlink" title="Linux基础指令："></a>Linux基础指令：</h3><ul><li style="list-style: none"><input type="checkbox"> <strong>linux终端打开之后，默认处于一个目录下（当前用户的家目录）</strong></li></ul><h4 id="1-命令的使用格式"><a href="#1-命令的使用格式" class="headerlink" title="1.命令的使用格式"></a>1.命令的使用格式</h4><ul><li style="list-style: none"><input type="checkbox"> 命令名称 [操作选项]  [操作对象]</li></ul><h4 id="2-目录相关命令："><a href="#2-目录相关命令：" class="headerlink" title="2.目录相关命令："></a>2.目录相关命令：</h4><ul><li style="list-style: none"><input type="checkbox"> <strong>ls : 浏览当前所在目录</strong><ul><li><strong>ls -a : 浏览所有目录，包括隐藏文件（Linux下文件以.开头的，是隐藏文件，默认不显示）</strong></li><li><strong>ls -l : 查看文件的详细信息</strong></li></ul></li><li style="list-style: none"><input type="checkbox"> <strong>pwd : 显示当前工作路径（当前所在路径）</strong><ul><li><strong>绝对路径</strong>（以根目录为起始的路径）</li><li><strong>相对路径</strong>（以当前路径为起始的路径）</li></ul></li><li style="list-style: none"><input type="checkbox"> <strong>mkdi : 创建一个目录</strong>（eg: mkdir testdir）</li><li style="list-style: none"><input type="checkbox"> <strong>rmdir : 删除空目录</strong><ul><li><strong>rm : 删除普通文件（不包括目录）</strong></li><li><strong>rm -r : 删除目录以及目录内的所有文件</strong></li></ul></li><li style="list-style: none"><input type="checkbox"> <strong>cp : 拷贝一个普通文件到普通目录下</strong><ul><li><strong>cp -r : 拷贝目录以及内部的所有文件</strong>(eg: cp -r install/ work/)</li></ul></li><li style="list-style: none"><input type="checkbox"> <strong>mv : 将文件移动到另一个位置（剪切）</strong>（eg: mv work/ install/）</li><li style="list-style: none"><input type="checkbox"> <strong>cd : 进入指定目录（改变当前工作路径）</strong><ul><li>cd ~ : 返回当前用户的家目录</li></ul></li></ul><h4 id="3-其他命令："><a href="#3-其他命令：" class="headerlink" title="3.其他命令："></a>3.其他命令：</h4><ul><li style="list-style: none"><input type="checkbox"> <strong>cat : 将文件内容打印到终端显示</strong>（eg: cat a.txt）</li><li style="list-style: none"><input type="checkbox"> <strong>su : 切换用户</strong></li></ul><h4 id="4-文件权限："><a href="#4-文件权限：" class="headerlink" title="4.文件权限："></a>4.文件权限：</h4><ul><li style="list-style: none"><input type="checkbox"> <strong>文件权限对用户的分类：文件所有者u    文件所属组g    其他用户o</strong></li><li style="list-style: none"><input type="checkbox"> <strong>文件权限对操作的分类：可读r    可写w    可执行x</strong></li><li style="list-style: none"><input type="checkbox"> <strong>对于目录文件的操作权限：可浏览    可创建/删除文件    可进入</strong></li><li style="list-style: none"><input type="checkbox"> <strong>rwx r-x r-x   三类用户分别对一个文件具备什么操作权限</strong></li><li style="list-style: none"><input type="checkbox"> <strong>chmod : 修改文件权限（文件所有者和root用户才可以修改）</strong><ul><li>chmod [audo] [+-] [rwx]<ul><li>chmod u + w file    chmod a + x file    chmod o - w file</li></ul></li></ul></li></ul><h4 id="5-vim基本操作"><a href="#5-vim基本操作" class="headerlink" title="5.vim基本操作"></a>5.vim基本操作</h4><ul><li style="list-style: none"><input type="checkbox"> <strong>常见操作模式：</strong><ul><li>普通：进行常见命令操作（复制、粘贴、删除）（无法插入数据）</li><li>插入：编辑文件内容</li><li>底行：文件的保存退出</li></ul></li><li style="list-style: none"><input type="checkbox"> <strong>vim test.c 回车后，打开文件开始编辑–&gt;默认处于普通模式</strong></li><li style="list-style: none"><input type="checkbox"> <strong>从普通模式切换到插入模式：</strong><ul><li>i  :   从光标所在位置开始插入</li></ul></li><li style="list-style: none"><input type="checkbox"> <strong>从任意模式切换到普通模式：按”ESC”</strong></li><li style="list-style: none"><input type="checkbox"> <strong>从普通模式切换到底行模式：按 “:”</strong><ul><li><strong>底行模式下的操作：</strong><ul><li><strong>:w  :   保存</strong></li><li><strong>:q   :    退出编辑</strong></li><li><strong>:wq   :   保存并退出</strong></li><li><strong>:q!    :    强制不保存退出</strong></li></ul></li></ul></li><li style="list-style: none"><input type="checkbox"> <strong>普通模式下的操作：</strong><ul><li><strong>复制：yy  复制光标所在行    nyy 从光标所在行开始向下复制n行数据</strong> </li><li><strong>粘贴：p 向光标所在行下方进行粘贴</strong></li><li><strong>剪切/删除：x 删除光标所在字符     dw 删除光标所在单词      dd 删除光标所在行     ndd</strong></li><li><strong>撤销上一步操作：u</strong></li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> Linux系统 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>HashMap源码分析</title>
       <link href="/2019/05/09/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/"/>
       <url>/2019/05/09/HashMap%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/</url>
